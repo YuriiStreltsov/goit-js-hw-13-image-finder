@@ -1,1 +1,3 @@
-import './styles.css';
+import './styles.scss';
+import 'material-design-icons';
+import './js/searchAndVievImagesAPP';
