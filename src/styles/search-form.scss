@@ -1,0 +1,9 @@
+.search-form {
+  display: flex;
+  align-items: center;
+
+  &__input {
+    height: 36px;
+    margin-right: 25px;
+  }
+}
