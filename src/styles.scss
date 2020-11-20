@@ -1,14 +1,5 @@
-@import './styles/body.scss';
+@import './styles/common.scss';
 @import './styles/header.scss';
 @import './styles/container.scss';
 @import './styles/load-more-btn.scss';
-
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
+@import '~material-design-icons/iconfont/material-icons.css';
