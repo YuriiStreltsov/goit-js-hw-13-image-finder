@@ -1,22 +1,28 @@
-import NewApiService from './apiService';
+import ImageApiService from './apiService';
 import refs from './refs';
 import galleryTpl from '../templates/gallery.hbs';
 
-const newApiService = new NewApiService();
+const imageApiService = new ImageApiService();
 
 refs.searchContainer.addEventListener('submit', onSearch)
+
+refs.loadeMoreBtn.addEventListener('click', onLoadeMore)
 
 function onSearch(event) {
   event.preventDefault();
 console.log(event.currentTarget.firstElementChild.elements.query.value);
-  newApiService.query = event.currentTarget.firstElementChild.elements.query.value;
+imageApiService.query = event.currentTarget.firstElementChild.elements.query.value;
 
-  if (newApiService.query === '') {
+  if (imageApiService.query === '') {
     return alert('Введи что-то нормальное');
 }
-newApiService.fetchImages().then(r => {
-  refs.searchContainer.insertAdjacentHTML('afterend', galleryTpl(r));
-});
+imageApiService.fetchImages().then(appendHitsMarkup);
 }
 
+function onLoadeMore () {
+  imageApiService.fetchImages().then(appendHitsMarkup);
+}
 
+function appendHitsMarkup(hits) {
+  refs.gallery.insertAdjacentHTML('beforeend', galleryTpl(hits));
+}
