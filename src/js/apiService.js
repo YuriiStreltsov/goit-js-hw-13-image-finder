@@ -11,8 +11,8 @@ export default class ImageApiService {
     const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.query}&page=${this.page}&per_page=12&key=${API_KEY}`;
     return fetch(url)
       .then(response => response.json())
-      .then(({ hits }) => { 
-        this.incrementPage();       
+      .then(({ hits }) => {
+        this.incrementPage();
         return hits;
       });
   }
@@ -24,12 +24,4 @@ export default class ImageApiService {
   resetPage() {
     this.page = 1;
   }
-
-  // get query() {
-  //   return this.query;
-  // }
-
-  // set query(newQuery) {
-  //   this.query = newQuery;
-  // }
 }

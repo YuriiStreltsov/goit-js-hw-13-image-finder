@@ -1,3 +1,20 @@
 .load-more-btn {
   margin-top: 15px;
 }
+
+.load-more-btn.is-hidden {
+  display: none;
+}
+
+.load-more-btn > .spinner.is-hidden {
+  display: none;
+}
+
+.load-more-btn:disabled {
+  background-color: gray;
+
+  &:hover {
+    box-shadow: none;
+    cursor: auto;
+  }
+}

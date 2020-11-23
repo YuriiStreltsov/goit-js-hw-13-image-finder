@@ -1,37 +1,54 @@
 import ImageApiService from './apiService';
 import refs from './refs';
 import galleryTpl from '../templates/gallery.hbs';
+import LoadMoreBtn from './loadMoreBtn';
 
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 const imageApiService = new ImageApiService();
 
-refs.searchContainer.addEventListener('submit', onSearch)
+refs.searchContainer.addEventListener('submit', onSearch);
 
-refs.loadeMoreBtn.addEventListener('click', onLoadeMore)
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 
 function onSearch(event) {
   event.preventDefault();
-console.log(event.currentTarget.firstElementChild.elements.query.value);
-imageApiService.query = event.currentTarget.firstElementChild.elements.query.value;
 
-  if (imageApiService.query === '') {
-    return alert('Введи что-то нормальное');
-}
-imageApiService.fetchImages().then(appendHitsMarkup);
+  imageApiService.query =
+    event.currentTarget.firstElementChild.elements.query.value;
+
+  if (imageApiService.query.length < 3) {
+    return alert('Enter at least 3 characters');
+  }
+  loadMoreBtn.show();
+  imageApiService.resetPage();
+  clearHitsContainer();
+  fetchImages();
 }
 
-async function onLoadeMore() {
-  
-  await imageApiService.fetchImages().then(data => { appendHitsMarkup(data);
-    });
-    await onScroll();
+async function onLoadMore() {
+  await fetchImages().then(onScroll);
+}
+
+async function fetchImages() {
+  loadMoreBtn.disable();
+  await imageApiService.fetchImages().then(appendHitsMarkup);
+  loadMoreBtn.enable();
 }
 
 function appendHitsMarkup(hits) {
   refs.gallery.insertAdjacentHTML('beforeend', galleryTpl(hits));
 }
 
-function onScroll() { 
+function onScroll() {
+  console.log(refs.gallery.getBoundingClientRect());
   const y = refs.gallery.getBoundingClientRect().y;
-  const screenHeight = document.documentElement.clientHeight;  
-  window.scrollTo({ top: screenHeight - y, behavior: 'smooth'})
+  const screenHeight = document.documentElement.clientHeight;
+  window.scrollTo({ top: screenHeight - y, behavior: 'smooth' });
+}
+
+function clearHitsContainer() {
+  refs.gallery.innerHTML = '';
 }
