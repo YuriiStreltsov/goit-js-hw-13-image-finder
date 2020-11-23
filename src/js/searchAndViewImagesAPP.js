@@ -19,10 +19,19 @@ imageApiService.query = event.currentTarget.firstElementChild.elements.query.val
 imageApiService.fetchImages().then(appendHitsMarkup);
 }
 
-function onLoadeMore () {
-  imageApiService.fetchImages().then(appendHitsMarkup);
+async function onLoadeMore() {
+  
+  await imageApiService.fetchImages().then(data => { appendHitsMarkup(data);
+    });
+    await onScroll();
 }
 
 function appendHitsMarkup(hits) {
   refs.gallery.insertAdjacentHTML('beforeend', galleryTpl(hits));
+}
+
+function onScroll() { 
+  const y = refs.gallery.getBoundingClientRect().y;
+  const screenHeight = document.documentElement.clientHeight;  
+  window.scrollTo({ top: screenHeight - y, behavior: 'smooth'})
 }
