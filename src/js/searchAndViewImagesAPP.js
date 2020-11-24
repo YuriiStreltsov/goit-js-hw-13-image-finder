@@ -29,7 +29,9 @@ function onSearch(event) {
 }
 
 async function onLoadMore() {
-  await fetchImages().then(onScroll);
+  const scroll = document.documentElement.scrollHeight;
+    await fetchImages();
+  onScroll(scroll);
 }
 
 async function fetchImages() {
@@ -42,13 +44,10 @@ function appendHitsMarkup(hits) {
   refs.gallery.insertAdjacentHTML('beforeend', galleryTpl(hits));
 }
 
-function onScroll() {
-  console.log(refs.gallery.getBoundingClientRect());
-  const y = refs.gallery.getBoundingClientRect().y;
-  const screenHeight = document.documentElement.clientHeight;
-  window.scrollTo({ top: screenHeight - y, behavior: 'smooth' });
+function onScroll(scroll) { 
+  window.scrollTo({ top: scroll - 40, behavior: 'smooth' });
 }
-
+ 
 function clearHitsContainer() {
   refs.gallery.innerHTML = '';
 }
