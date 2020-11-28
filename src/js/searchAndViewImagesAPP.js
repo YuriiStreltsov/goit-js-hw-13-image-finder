@@ -17,11 +17,10 @@ loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 function onSearch(event) {
   event.preventDefault();
 
-  imageApiService.query =
-    event.currentTarget.firstElementChild.elements.query.value;
+  imageApiService.query = event.currentTarget.firstElementChild.elements.query.value.trim();
 
-  if (imageApiService.query.length < 3) {
-    return alert('Enter at least 3 characters');
+  if (imageApiService.query.length === 0) {
+    return;
   }
   loadMoreBtn.show();
   imageApiService.resetPage();
