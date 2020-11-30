@@ -36,7 +36,13 @@ async function onLoadMore() {
 
 async function fetchImages() {
   loadMoreBtn.disable();
-  await imageApiService.fetchImages().then(appendHitsMarkup);
+  await imageApiService.fetchImages().then(data => {
+    appendHitsMarkup(data);
+    if (data.length >= 12) {
+      return;
+    }
+    loadMoreBtn.hide();
+  });
   loadMoreBtn.enable();
 }
 
@@ -55,6 +61,11 @@ function clearHitsContainer() {
 refs.gallery.addEventListener('click', openLightBox);
 
 function openLightBox(event) {
+  const targetItem = event.target;
+  const IsElemGallery = targetItem.closest('img');
+  if (!IsElemGallery) {
+    return;
+  }
   const set = { src: event.target.dataset.src, alt: event.target.alt };
   openImage(set);
 }
